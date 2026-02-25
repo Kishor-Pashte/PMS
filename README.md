@@ -128,7 +128,7 @@ The Parking Management System provides:
     
     ⚙️ Installation Guide
         1️⃣ Clone Repository
-            git clone https://github.com/your-username/parking-management-system.git
+            git clone https://github.com/Kishor-Pashte/PMS.git
             cd parking-management-system
         2️⃣ Backend Setup
             cd backend
