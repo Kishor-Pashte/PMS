@@ -28,8 +28,9 @@ export default function AdminLogin() {
 
     try {
       const res = await API.post("/admin/login", formData);
-      localStorage.setItem("token", res.data.token);
+      // localStorage.setItem("token", res.data.token);
       localStorage.setItem('admin', res.data.adminName)
+      dispatch(loginSuccess(res.data.token))
 
       toast.success(res.data.message);
       navigate("/admin/dashboard");

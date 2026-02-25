@@ -1,12 +1,17 @@
 import React from "react";
+import toast from "react-hot-toast";
 import { Link, Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 
 export default function UserLayout() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    dispatch(logout());
+    toast.success('User logged out')
     navigate('/')
 
   }

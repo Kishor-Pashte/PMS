@@ -1,11 +1,16 @@
 import React from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    dispatch(logout());
+    toast.success("Admin logged out")
     navigate("/");
   };
 

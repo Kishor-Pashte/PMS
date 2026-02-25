@@ -39,7 +39,7 @@ const authSlice = createSlice({
             state.role = null;
             state.userId = null;
             state.isAuthenticated = false;
-
+            
             localStorage.removeItem('token')
 
         }

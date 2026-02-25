@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import API from "../../api/axios";
-import toast from "react-hot-toast";
+
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const name = localStorage.getItem('admin')
+  
 
   const fetchDashboard = async () => {
     setLoading(true);
