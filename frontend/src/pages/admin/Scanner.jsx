@@ -4,6 +4,7 @@ import API from "../../api/axios";
 
 export default function Scanner() {
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState(""); // success / error
   const scannerRef = useRef(null);
   const isProcessingRef = useRef(false);
 
@@ -11,18 +12,16 @@ export default function Scanner() {
     const scanner = new Html5QrcodeScanner(
       "reader",
       { fps: 10, qrbox: 250 },
-      false,
+      false
     );
 
     scannerRef.current = scanner;
 
     const onScanSuccess = async (decodedText) => {
-      // 🚫 Prevent multiple calls
       if (isProcessingRef.current) return;
       isProcessingRef.current = true;
 
       try {
-        // 🛑 Stop scanning immediately
         await scanner.clear();
 
         const res = await API.post("/scan", {
@@ -30,9 +29,10 @@ export default function Scanner() {
         });
 
         setMessage(res.data.message);
+        setStatus("success");
       } catch (e) {
-        console.log(e);
         setMessage(e.response?.data?.message || "Scan failed");
+        setStatus("error");
       }
     };
 
@@ -46,11 +46,30 @@ export default function Scanner() {
 
   return (
     <div>
-      <h2>Vehicle Scanner</h2>
-      <div id="reader" style={{ width: "350px", marginTop: "20px" }}></div>
+      {/* Page Title */}
+      <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        Vehicle Scanner
+      </h2>
 
+      {/* Scanner Card */}
+      <div className="bg-white border border-gray-200 rounded-md p-6 max-w-md">
+        <div
+          id="reader"
+          className="w-full"
+        ></div>
+      </div>
+
+      {/* Message */}
       {message && (
-        <h3 style={{ marginTop: "20px", color: "green" }}>{message}</h3>
+        <div
+          className={`mt-6 p-4 rounded-md text-sm font-medium max-w-md ${
+            status === "success"
+              ? "bg-green-100 text-green-700 border border-green-200"
+              : "bg-red-100 text-red-700 border border-red-200"
+          }`}
+        >
+          {message}
+        </div>
       )}
     </div>
   );

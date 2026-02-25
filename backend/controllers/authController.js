@@ -6,7 +6,7 @@ import User from "../models/User.js";
 //Admin Login /api/admin/login    (admin registeration done manually)
 const adminLogin = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const {name, email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: "Email & Password required" });
     }
@@ -32,7 +32,7 @@ const adminLogin = async (req, res, next) => {
 
     return res
       .status(201)
-      .json({ message: "Admin logged in successfully", token });
+      .json({ message: "Admin logged in successfully", token, adminName: admin.name });
   } catch (e) {
     next(e);
   }
@@ -65,7 +65,7 @@ const userLogin = async (req, res, next) => {
       { expiresIn: "7d" },
     );
 
-    res.status(200).json({ message: "User logged in successfully", token });
+    res.status(200).json({ message: "User logged in successfully", token, name:user.name });
   } catch (e) {
     next(e);
   }
@@ -73,11 +73,11 @@ const userLogin = async (req, res, next) => {
 
 const adminRegister = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const {name, email, password } = req.body;
 
     const hashPass = await bcrypt.hash(password, 10);
 
-    const admin = await Admin.create({ email, password: hashPass });
+    const admin = await Admin.create({name, email, password: hashPass });
 
     res.status(201).json({ message: "Admin registered successfully!", admin });
   } catch (e) {

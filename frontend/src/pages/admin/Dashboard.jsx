@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import API from "../../api/axios";
+import toast from "react-hot-toast";
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const name = localStorage.getItem('admin')
 
   const fetchDashboard = async () => {
     setLoading(true);
@@ -22,18 +25,29 @@ export default function Dashboard() {
   }, []);
 
   if (loading) {
-    return <h3>Dashboard Loading...</h3>;
+    return (
+      <div className="text-gray-600 text-sm">
+        Dashboard Loading...
+      </div>
+    );
   }
 
   return (
     <div>
-      <h2>Admin Dashboard</h2>
+      {/* Page Title */}
+      <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        Admin Dashboard
+      </h2>
 
-      <div>
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         <Card title="Total Vehicles" value={stats.totalVehicles} />
         <Card title="Entries Today" value={stats.totalEntriesToday} />
         <Card title="Exits Today" value={stats.totalExitsToday} />
-        <Card title="Currently Inside Vehicles" value={stats.insideVehicles} />
+        <Card
+          title="Currently Inside Vehicles"
+          value={stats.insideVehicles}
+        />
       </div>
     </div>
   );
@@ -41,9 +55,13 @@ export default function Dashboard() {
 
 function Card({ title, value }) {
   return (
-    <div>
-      <h4>{title}</h4>
-      <h4>{value}</h4>
+    <div className="bg-white border border-gray-200 rounded-md p-6">
+      <h4 className="text-sm text-gray-600 mb-2">
+        {title}
+      </h4>
+      <h4 className="text-2xl font-semibold text-gray-800">
+        {value}
+      </h4>
     </div>
   );
 }

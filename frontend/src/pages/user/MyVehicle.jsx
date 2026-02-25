@@ -10,9 +10,7 @@ export default function MyVehicle() {
     setLoading(true);
     try {
       const res = await API.get("/scan/my-vehicles");
-      if (res.data.length > 0) {
-        setVehicle(res.data[0]); //we take first vehicle
-      }
+      setVehicle(res.data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -24,112 +22,108 @@ export default function MyVehicle() {
     fetchUserVehicle();
   }, []);
 
-  if (loading) return <h3>Loading...</h3>;
+  if (loading)
+    return <p className="text-sm text-gray-600">Loading...</p>;
 
   return (
-    <div style={container}>
-      <div style={navbar}>
-        <h3>User Panel</h3>
-      </div>
+    <div>
 
-      <div style={tabContainer}>
-        <button onClick={() => setActiveTab("profile")}>Profile</button>
+      {/* Page Title */}
+      <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        My Vehicle
+      </h2>
 
-        <button onClick={() => setActiveTab("qr")}>My QR Code</button>
+      {/* Tabs */}
+      <div className="flex gap-4 mb-6 border-b border-gray-200">
+        <button
+          onClick={() => setActiveTab("profile")}
+          className={`px-4 py-2 text-sm font-medium ${
+            activeTab === "profile"
+              ? "border-b-2 border-gray-900 text-gray-900"
+              : "text-gray-600 hover:text-gray-900"
+          }`}
+        >
+          Profile
+        </button>
 
-        <button onClick={() => setActiveTab("history")}>
+        <button
+          onClick={() => setActiveTab("qr")}
+          className={`px-4 py-2 text-sm font-medium ${
+            activeTab === "qr"
+              ? "border-b-2 border-gray-900 text-gray-900"
+              : "text-gray-600 hover:text-gray-900"
+          }`}
+        >
+          My QR Code
+        </button>
+
+        <button
+          onClick={() => setActiveTab("history")}
+          className={`px-4 py-2 text-sm font-medium ${
+            activeTab === "history"
+              ? "border-b-2 border-gray-900 text-gray-900"
+              : "text-gray-600 hover:text-gray-900"
+          }`}
+        >
           My Parking History
         </button>
       </div>
 
-      <div style={contentBox}>
+      {/* Content Box */}
+      <div className="bg-white border border-gray-200 rounded-md p-6 min-h-[250px]">
+
+        {/* PROFILE TAB */}
         {activeTab === "profile" && vehicle && (
-          <div>
-            <h3>Profile</h3>
+          <div className="space-y-3 text-sm">
+            <h3 className="text-lg font-semibold mb-4">Profile</h3>
+
+            <p><strong>Owner Name:</strong> {vehicle.ownerName}</p>
+            <p><strong>Vehicle Number:</strong> {vehicle.vehicleNumber}</p>
+            <p><strong>Flat:</strong> {vehicle.flatNumber}</p>
+            <p><strong>Email:</strong> {vehicle.email}</p>
             <p>
-              <strong>Name:</strong> {vehicle.ownerName}
-            </p>
-            <p>
-              <strong>Vehicle Number:</strong> {vehicle.vehicleNumber}
-            </p>
-            <p>
-              <strong>Flat:</strong> {vehicle.flatNumber}
-            </p>
-            <p>
-              <strong>Vehicle Type:</strong> {vehicle.vehicleType}
-            </p>
-            <p>
-              <strong>Registration Date:</strong> {vehicle.createdAt}
+              <strong>Registration Date:</strong>{" "}
+              {new Date(vehicle.createdAt).toLocaleDateString()}
             </p>
           </div>
         )}
 
+        {/* QR TAB */}
         {activeTab === "qr" && vehicle && (
-          <div>
-            <h3>My QR Code</h3>
+          <div className="text-center">
+            <h3 className="text-lg font-semibold mb-6">
+              My QR Code
+            </h3>
+
             <img
               src={vehicle.qrImage}
               alt="QR"
-              style={{ width: "200px", marginBottom: "15px" }}
+              className="w-48 mx-auto mb-6 border border-gray-200 p-2 rounded-md"
             />
-            <br />
-            <a href={vehicle.qrImage} download="my-qr.png" style={downloadBtn}>
+
+            <a
+              href={vehicle.qrImage}
+              download="my-qr.png"
+              className="inline-block bg-gray-900 text-white text-sm px-5 py-2 rounded-md"
+            >
               Download QR
             </a>
           </div>
         )}
 
+        {/* HISTORY TAB */}
         {activeTab === "history" && (
           <div>
-            <h3>Parking History</h3>
-            <p>(History API not implemented yet)</p>
+            <h3 className="text-lg font-semibold mb-4">
+              Parking History
+            </h3>
+            <p className="text-sm text-gray-600">
+              (History API not implemented yet)
+            </p>
           </div>
         )}
+
       </div>
     </div>
   );
 }
-
-const container = {
-  padding: "20px",
-};
-
-const navbar = {
-  background: "#111827",
-  color: "white",
-  padding: "15px",
-  marginBottom: "20px",
-};
-
-const tabContainer = {
-  display: "flex",
-  gap: "15px",
-  marginBottom: "20px",
-};
-
-const tabStyle = {
-  padding: "10px 20px",
-  border: "1px solid #ccc",
-  background: "#f3f4f6",
-  cursor: "pointer",
-};
-
-const activeTabStyle = {
-  ...tabStyle,
-  background: "#111827",
-  color: "white",
-};
-
-const contentBox = {
-  border: "2px solid #ccc",
-  padding: "20px",
-  minHeight: "250px",
-};
-
-const downloadBtn = {
-  padding: "8px 15px",
-  background: "black",
-  color: "white",
-  textDecoration: "none",
-  borderRadius: "5px",
-};

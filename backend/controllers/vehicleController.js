@@ -52,6 +52,7 @@ const generateQR = async (req, res, next) => {
     const qrId = uuidv4();
     const qrImage = await QRCode.toDataURL(qrId);
 
+
     // ✅ Create Vehicle linked to THAT user
     const vehicle = await Vehicle.create({
       ownerName,
@@ -146,7 +147,9 @@ const scanVehicles = async (req, res, next) => {
 
 const getMyVehicles = async (req, res, next) => {
   try {
-    const vehicles = await Vehicle.find({ user: req.user._id });
+
+    console.log(req.user)
+    const vehicles = await Vehicle.findOne({ user: req.user._id });
     res.status(200).json(vehicles);
   } catch (e) {
     next(e);

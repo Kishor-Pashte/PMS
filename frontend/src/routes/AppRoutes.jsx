@@ -13,13 +13,21 @@ import UserLogin from "../pages/user/UserLogin";
 import UserLayout from "../layouts/UserLayout";
 import MyVehicle from "../pages/user/MyVehicle";
 
+import HomePage from "../pages/HomePage";
+
+
+
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        
+        {/* Home page */}
+        <Route path="/" element={<HomePage />}/>
+
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute role={'admin'}/>}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/generate-qr" element={<GenerateQR />} />
@@ -31,7 +39,7 @@ export default function AppRoutes() {
 
         <Route path="/user/login" element={<UserLogin />} />
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute role={'user'}/>}>
           <Route element={<UserLayout />}>
             <Route path="/user/my-vehicle" element={<MyVehicle />} />
           </Route>

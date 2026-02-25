@@ -6,27 +6,80 @@ export default function AdminLayout() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/admin/login");
+    navigate("/");
   };
 
+  let admin = localStorage.getItem('admin');
+ 
+
   return (
-    <div>
-      <div>
-        <h2>Parking Admin</h2>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      
+      {/* Top Navbar */}
+      <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-gray-800">
+          Parking Admin
+        </h2>
 
-        <nav>
-          <Link to={"/admin/dashboard"}>Dashboard</Link>
-          <Link to={"/admin/generate-qr"}>Generate QR</Link>
-          <Link to={"/admin/vehicles"}>Vehicles</Link>
-          <Link to={"/admin/scanner"}>Scanner</Link>
-          <Link to={"/admin/history"}>History</Link>
-        </nav>
 
-        <button onClick={handleLogout}>Logout</button>
-      </div>
+        <span className="flex">
+          <p className="flex justify-center  items-center font-semibold text-md text-gray-800">Welcome {admin}!</p>
+        
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 text-sm bg-gray-900 text-white rounded-md text-gray-800 ml-5"
+        >
+          Logout
+        </button></span>
+      </header>
 
-      <div>
-        <Outlet />
+      {/* Body Section */}
+      <div className="flex flex-1">
+        
+        {/* Sidebar */}
+        <aside className="w-60 bg-white border-r border-gray-200 p-6">
+          <nav className="flex flex-col gap-4 text-sm text-gray-700">
+            <Link
+              to="/admin/dashboard"
+              className="hover:text-black"
+            >
+              Dashboard
+            </Link>
+
+            <Link
+              to="/admin/generate-qr"
+              className="hover:text-black"
+            >
+              Generate QR
+            </Link>
+
+            <Link
+              to="/admin/vehicles"
+              className="hover:text-black"
+            >
+              Vehicles
+            </Link>
+
+            <Link
+              to="/admin/scanner"
+              className="hover:text-black"
+            >
+              Scanner
+            </Link>
+
+            <Link
+              to="/admin/history"
+              className="hover:text-black"
+            >
+              History
+            </Link>
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 p-8">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
