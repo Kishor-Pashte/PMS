@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:4000/api",
+  // baseURL: "http://localhost:4000/api",
+  baseURL: `https://pms-v65n.onrender.com/api`,
 });
 
 API.interceptors.request.use((req) => {

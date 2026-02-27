@@ -13,7 +13,7 @@ export default function GenerateQR() {
   });
 
   const [qrImage, setQrImage] = useState(null);
- 
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,13 +26,13 @@ export default function GenerateQR() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await API.post("/generate-qr", formData);
       setQrImage(res.data.qrImage);
-      
 
-      toast.success(res.data.message)
+      toast.success(res.data.message);
       setFormData({
         ownerName: "",
         vehicleNumber: "",
@@ -43,6 +43,8 @@ export default function GenerateQR() {
       });
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Creating QR");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,8 +56,10 @@ export default function GenerateQR() {
 
       {/* Form Card */}
       <div className="bg-white border border-gray-200 rounded-md p-6 mb-6">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
           <input
             type="text"
             required
@@ -127,20 +131,17 @@ export default function GenerateQR() {
         </form>
       </div>
 
-      
-
+      {loading && (
+        <p className=" mt-8 text-center text-gray-600 text-sm">
+          Generating QR Code...
+        </p>
+      )}
       {/* QR Preview */}
       {qrImage && (
         <div className="bg-white border border-gray-200 rounded-md p-6 text-center">
-          <h3 className="text-lg font-medium text-gray-800 mb-4">
-            QR Code
-          </h3>
+          <h3 className="text-lg font-medium text-gray-800 mb-4">QR Code</h3>
 
-          <img
-            src={qrImage}
-            alt="QR Code"
-            className="mx-auto mb-4 w-40 h-40"
-          />
+          <img src={qrImage} alt="QR Code" className="mx-auto mb-4 w-40 h-40" />
 
           <a
             href={qrImage}
