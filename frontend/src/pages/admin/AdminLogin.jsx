@@ -4,7 +4,6 @@ import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../redux/slices/authSlice";
-import { RotatingLines } from "react-loader-spinner";
 
 export default function AdminLogin() {
   const [formData, setFormData] = useState({
