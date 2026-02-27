@@ -8,6 +8,7 @@ export default function UserLogin() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,31 +22,30 @@ export default function UserLogin() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    
+    setLoading(true);
+
     try {
       const res = await API.post("/user/login", formData);
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem('name', res.data.name)
+      localStorage.setItem("name", res.data.name);
 
-      toast.success(res.data.message)
+      toast.success(res.data.message);
       navigate("/user/my-vehicle");
     } catch (e) {
       toast.error(e.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      
       <div className="bg-white border border-gray-200 rounded-md p-8 w-full max-w-sm">
-        
         <h2 className="text-xl font-semibold text-gray-800 mb-6 text-center">
           User Login
         </h2>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          
           <input
             type="email"
             placeholder="Email"
@@ -68,14 +68,16 @@ export default function UserLogin() {
             type="submit"
             className="w-full bg-gray-900 text-white py-2 rounded-md text-sm"
           >
-            Login
+            {loading ? "Signing you in..." : "Login"}
           </button>
 
-          <Link className="flex justify-center text-gray-600 hover:text-gray-900 " to={'/'}>Navigate to Home</Link>
-
-          
+          <Link
+            className="flex justify-center text-gray-600 hover:text-gray-900 "
+            to={"/"}
+          >
+            Navigate to Home
+          </Link>
         </form>
-
       </div>
     </div>
   );
